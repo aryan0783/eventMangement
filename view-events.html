@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Events</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff7e5f, #feb47b);
+            /* Gradient background matching event tile colors */
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-top: 20px;
+            overflow-y: auto;
+            max-height: 85vh;
+            /* Prevents container from stretching too much */
+        }
+
+        .container h1 {
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .event-tiles {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 0;
+            list-style: none;
+            margin: 0;
+        }
+
+        .event-tile {
+            background: linear-gradient(135deg, #ff7e5f, #feb47b);
+            /* Gradient matching tile color */
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            color: #fff;
+            text-align: left;
+        }
+
+        .event-tile:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .event-tile h3 {
+            font-size: 26px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .event-tile p {
+            font-size: 18px;
+            margin: 5px 0;
+        }
+
+        .event-tile button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #333;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .event-tile button:hover {
+            background-color: #007bff;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .button-group button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #333;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button-group button:hover {
+            background-color: #007bff;
+        }
+
+        footer {
+            background-color: #ffffff;
+            color: rgb(46, 37, 37);
+            text-align: center;
+            padding: 8px 0;
+            /* Reduced padding for smaller footer */
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+            font-size: 12px;
+            /* Reduced font size */
+        }
+
+        footer a {
+            color: #df9101;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>View Events</h1>
+        <ul id="event-list" class="event-tiles">
+            <!-- Events will be displayed as tiles here -->
+        </ul>
+        <div class="button-group">
+            <button onclick="window.location.href='event-create.html'">Add Event</button>
+            <button onclick="window.location.href='index.html'">Home</button>
+        </div>
+    </div>
+
+    <script>
+        function loadEvents() {
+            const eventList = document.getElementById('event-list');
+            eventList.innerHTML = ''; // Clear the current list
+
+            const events = JSON.parse(localStorage.getItem('events')) || [];
+
+            // If no events, display a message
+            if (events.length === 0) {
+                eventList.innerHTML = '<li>No events available. Please add some events.</li>';
+                return;
+            }
+
+            events.forEach(event => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('event-tile');
+                listItem.innerHTML = `
+                <h3>${event.name}</h3>
+                <p><strong>Date:</strong> ${event.date}</p>
+                <p><strong>Location:</strong> ${event.location}</p>
+                <p><strong>Description:</strong> ${event.description}</p>
+                <button onclick="editEvent('${event.name}')">Edit</button>
+                <button onclick="deleteEvent('${event.name}')">Delete</button>
+            `;
+                eventList.appendChild(listItem);
+            });
+        }
+
+        function editEvent(eventName) {
+            alert('Edit functionality is not implemented.');
+        }
+
+        function deleteEvent(eventName) {
+            let events = JSON.parse(localStorage.getItem('events')) || [];
+            events = events.filter(event => event.name !== eventName);
+            localStorage.setItem('events', JSON.stringify(events));
+            loadEvents();
+        }
+
+        window.onload = loadEvents;
+    </script>
+
+    <footer>
+        <p>© 2025 Event Management. All rights reserved.</p>
+        <p>Designed by Aryan</p>
+    </footer>
+
+</body>
+
+</html>

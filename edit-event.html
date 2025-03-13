@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Event</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 135vh;
+            margin: 0;
+        }
+
+        .container {
+            width: 600px;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .container h1 {
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            height: 80px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #007bff;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+        footer {
+            background-color: #f4f7f6;
+            color: rgb(46, 37, 37);
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        footer a {
+            color: #df9101;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Edit Event</h1>
+    <div class="form-group">
+        <label for="edit-event-name">Event Name:</label>
+        <input type="text" id="edit-event-name">
+    </div>
+    <div class="form-group">
+        <label for="edit-event-date">Event Date:</label>
+        <input type="text" id="edit-event-date">
+    </div>
+    <div class="form-group">
+        <label for="edit-event-location">Event Location:</label>
+        <input type="text" id="edit-event-location">
+    </div>
+    <div class="form-group">
+        <label for="edit-event-description">Event Description:</label>
+        <textarea id="edit-event-description"></textarea>
+    </div>
+    <button onclick="updateEvent()">Update Event</button>
+    <button onclick="cancelEdit()">Cancel</button>
+</div>
+
+<script>
+    function getQueryParams() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+            index: params.get('index'),
+            name: params.get('name'),
+            date: params.get('date'),
+            location: params.get('location'),
+            description: params.get('description')
+        };
+    }
+
+    function populateEditForm() {
+        const params = getQueryParams();
+        document.getElementById('edit-event-name').value = params.name;
+        document.getElementById('edit-event-date').value = params.date;
+        document.getElementById('edit-event-location').value = params.location;
+        document.getElementById('edit-event-description').value = params.description;
+        document.getElementById('edit-event-index').value = params.index;
+    }
+
+    function updateEvent() {
+        const index = document.getElementById('edit-event-index').value;
+        const name = document.getElementById('edit-event-name').value;
+        const date = document.getElementById('edit-event-date').value;
+        const location = document.getElementById('edit-event-location').value;
+        const description = document.getElementById('edit-event-description').value;
+
+        if (name && date && location && description) {
+            const event = {
+                name: name,
+                date: date,
+                location: location,
+                description: description
+            };
+
+            let events = JSON.parse(localStorage.getItem('events')) || [];
+            events[index] = event;
+            localStorage.setItem('events', JSON.stringify(events));
+
+            alert('Event updated successfully!');
+            window.location.href = 'view-events.html';
+        } else {
+            alert('Please fill out all fields.');
+        }
+    }
+
+    function cancelEdit() {
+        window.location.href = 'view-events.html';
+    }
+
+    populateEditForm();
+</script>
+
+<input type="hidden" id="edit-event-index">
+
+</body>
+<footer>
+    <p>© 2025 Event Management. All rights reserved.</p>
+    <p>Designed by Aryan</a></p>
+</footer>
+</html>

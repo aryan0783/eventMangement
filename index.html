@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management Home</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff7e5f, #feb47b); /* Vibrant gradient background */
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 900px;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            color: #333;
+        }
+
+        .container h1 {
+            font-size: 40px;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .container p {
+            font-size: 20px;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background-color: #007bff;
+            transition: background-color 0.3s ease;
+            margin: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .logout-button {
+            background-color: #e74c3c; /* Red for logout */
+        }
+
+        .logout-button:hover {
+            background-color: #c0392b;
+        }
+
+        footer {
+            background-color: #ffffff;
+            color: rgb(46, 37, 37);
+            text-align: center;
+            padding: 8px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+            font-size: 12px;
+        }
+
+        footer a {
+            color: #df9101;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Welcome to Event Management</h1>
+    <p>Manage your events easily from this platform.</p>
+    <button onclick="window.location.href='event-create.html'">Add Event</button>
+    <button onclick="window.location.href='view-events.html'">View Events</button>
+    <button class="logout-button" onclick="logout()">Logout</button>
+</div>
+
+<script>
+    function logout() {
+        // Simulate a logout function (can redirect or clear session data)
+        alert('You have logged out successfully!');
+        window.location.href = 'login.php';  // Redirect to login page (or any page)
+    }
+</script>
+
+<footer>
+    <p>© 2025 Event Management. All rights reserved.</p>
+    <p>Designed by Aryan</p>
+</footer>
+
+</body>
+</html>
