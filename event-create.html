@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Event</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff7e5f, #feb47b);
+            /* Gradient background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            width: 600px;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .container:hover {
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .container h1 {
+            font-size: 32px;
+            color: #ff7e5f;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background-color: #f4f7f6;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #ff7e5f;
+            background-color: #ffffff;
+            box-shadow: 0 0 5px rgba(255, 126, 95, 0.3);
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 16px;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #ff7e5f;
+            transition: background-color 0.3s ease;
+            margin: 5px;
+        }
+
+        button:hover {
+            background-color: #feb47b;
+        }
+
+        footer {
+            background-color: #ffffff;
+            color: #333;
+            text-align: center;
+            padding: 15px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            font-size: 14px;
+        }
+
+        footer a {
+            color: #ff7e5f;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .payment-section {
+            display: none;
+            /* Initially hidden */
+            text-align: left;
+        }
+
+        .payment-section h2 {
+            color: #ff7e5f;
+        }
+
+        /* Add subtle animation for inputs */
+        .form-group input,
+        .form-group textarea {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Create New Event</h1>
+        <div class="form-group">
+            <label for="event-name">Event Name:</label>
+            <input type="text" id="event-name">
+        </div>
+        <div class="form-group">
+            <label for="event-date">Event Date:</label>
+            <input type="date" id="event-date">
+        </div>
+        <div class="form-group">
+            <label for="event-location">Event Location:</label>
+            <input type="text" id="event-location">
+        </div>
+        <div class="form-group">
+            <label for="event-description">Event Description:</label>
+            <textarea id="event-description"></textarea>
+        </div>
+
+        <button onclick="showPaymentSection()">Proceed to Payment</button>
+
+        <div class="payment-section" id="payment-section">
+            <h2>Payment Details</h2>
+            <div class="form-group">
+                <label for="card-number">Card Number:</label>
+                <input type="text" id="card-number" placeholder="Enter Card Number" maxlength="12">
+            </div>
+            <div class="form-group">
+                <label for="expiry-date">Expiry Date:</label>
+                <input type="month" id="expiry-date">
+            </div>
+            <div class="form-group">
+                <label for="cvv">CVV:</label>
+                <input type="text" id="cvv" placeholder="Enter CVV" maxlength="3">
+            </div>
+
+            <button onclick="makePayment()">Make Payment</button>
+            <button onclick="cancelPayment()">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        // Function to prevent numbers in event name and location fields
+        function preventNumbers(event) {
+            const regex = /[0-9]/g;
+            if (regex.test(event.key)) {
+                event.preventDefault(); // Prevent number input
+            }
+        }
+
+        // Add event listeners to prevent numbers in the event name and location inputs
+        document.getElementById('event-name').addEventListener('keypress', preventNumbers);
+        document.getElementById('event-location').addEventListener('keypress', preventNumbers);
+
+        // Function to set today's date as the minimum date for the event date input
+        function setMinDate() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            let mm = today.getMonth() + 1; // Months are zero-based, so we add 1
+            let dd = today.getDate();
+
+            // Ensure the month and day are always two digits
+            if (mm < 10) mm = '0' + mm;
+            if (dd < 10) dd = '0' + dd;
+
+            const minDate = yyyy + '-' + mm + '-' + dd;
+            document.getElementById('event-date').setAttribute('min', minDate);
+        }
+
+        // Set the minimum date when the page loads
+        setMinDate();
+
+        // Add event listener to restrict alphabets in the card number input field
+        document.getElementById('card-number').addEventListener('input', function (event) {
+            this.value = this.value.replace(/[^0-9]/g, ''); // Only allow numbers
+        });
+
+        // Add event listener to restrict alphabets in the CVV input field
+        document.getElementById('cvv').addEventListener('input', function (event) {
+            this.value = this.value.replace(/[^0-9]/g, ''); // Only allow numbers
+        });
+
+        // Function to show the payment section
+        function showPaymentSection() {
+            const name = document.getElementById('event-name').value;
+            const date = document.getElementById('event-date').value;
+            const location = document.getElementById('event-location').value;
+            const description = document.getElementById('event-description').value;
+
+            // Ensure that all fields are filled out before showing payment section
+            if (name && date && location && description) {
+                document.getElementById('payment-section').style.display = 'block'; // Show payment section
+            } else {
+                alert('Please fill out all event details before proceeding to payment.');
+            }
+        }
+
+        function makePayment() {
+            const cardNumber = document.getElementById('card-number').value;
+            const expiryDate = document.getElementById('expiry-date').value;
+            const cvv = document.getElementById('cvv').value;
+
+            // Basic validation of payment details (This is just a simulation, in reality, you should integrate a payment gateway)
+            if (cardNumber.length === 12 && expiryDate && cvv.length === 3) {
+                alert('Payment Successful!');
+                saveEvent();
+            } else {
+                alert('Please fill out all payment details correctly.');
+            }
+        }
+
+        function cancelPayment() {
+            document.getElementById('payment-section').style.display = 'none'; // Hide payment section
+        }
+
+        function saveEvent() {
+            const name = document.getElementById('event-name').value;
+            const date = document.getElementById('event-date').value;
+            const location = document.getElementById('event-location').value;
+            const description = document.getElementById('event-description').value;
+
+            // Ensure that all fields are filled out before saving
+            if (name && date && location && description) {
+                const event = {
+                    name: name,
+                    date: date,
+                    location: location,
+                    description: description
+                };
+
+                // Get existing events from localStorage or initialize an empty array
+                let events = JSON.parse(localStorage.getItem('events')) || [];
+                events.push(event);
+                // Save updated events back to localStorage
+                localStorage.setItem('events', JSON.stringify(events));
+                // Redirect to the events view page
+                window.location.href = 'view-events.html';
+            } else {
+                alert('Please fill out all fields.');
+            }
+        }
+    </script>
+</body>
+
+</html>
